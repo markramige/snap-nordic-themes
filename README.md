@@ -1,5 +1,7 @@
 This is an unofficial Snap release of the [Nordic themes](https://github.com/EliverLara/Nordic).
 
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/nordic-themes)
+
 You can install the theme from the Snap Store оr by running:
 
 ```
