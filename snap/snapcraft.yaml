@@ -1,0 +1,65 @@
+name: nordic-themes
+summary: Snap version of the Nordic GTK themes
+description: |
+  Nordic GTK themes created by EliverLara - https://github.com/EliverLara/Nordic
+
+  This is an unofficial snap release.
+
+  To connect the theme to an app, run:
+
+  `sudo snap connect [other snap]:gtk-3-themes nordic-themes:gtk-3-themes`
+
+  To connect the theme to all apps which have available plugs to gtk-common-themes you can run:
+
+  `for i in $(snap connections | grep gtk-common-themes:gtk-3-themes | awk '{print $2}'); do sudo snap connect $i nordic-themes:gtk-3-themes; done`
+
+version: '1.9-snap04'
+license: 'GPL-3.0'
+architectures:
+  - all
+base: core18
+grade: stable
+confinement: strict
+
+slots:
+  gtk-2-themes:
+    interface: content
+    source:
+      read:
+        - $SNAP/share/gtk2/Nordic
+        - $SNAP/share/gtk2/Nordic-bluish-accent
+        - $SNAP/share/gtk2/Nordic-bluish-accent-standard-buttons
+        - $SNAP/share/gtk2/Nordic-darker
+        - $SNAP/share/gtk2/Nordic-darker-standard-buttons
+        - $SNAP/share/gtk2/Nordic-standard-buttons
+  gtk-3-themes:
+    interface: content
+    source:
+      read:
+        - $SNAP/share/themes/Nordic
+        - $SNAP/share/themes/Nordic-bluish-accent
+        - $SNAP/share/themes/Nordic-bluish-accent-standard-buttons
+        - $SNAP/share/themes/Nordic-darker
+        - $SNAP/share/themes/Nordic-darker-standard-buttons
+        - $SNAP/share/themes/Nordic-standard-buttons
+
+parts:
+  nordic-themes:
+    after: [utils]
+    plugin: dump
+    source: themes
+    override-build: |
+        snapcraftctl build
+        mkdir -p $SNAPCRAFT_PART_INSTALL/share/themes
+        mv $SNAPCRAFT_PART_INSTALL/Nordic* $SNAPCRAFT_PART_INSTALL/share/themes/
+        $SNAPCRAFT_STAGE/split-gtk-theme.sh $SNAPCRAFT_PART_INSTALL
+    stage:
+      - share/gtk2/*/gtk-2.0
+      - share/themes/*/gtk-3*
+      - share/themes/*/assets
+
+  utils:
+    plugin: dump
+    source: utils
+    prime:
+      - -*
